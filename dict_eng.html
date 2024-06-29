@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title> Coloring a map </title>
+    <link type="text/css" href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet"   />
+</head>
+<body>
+    <div class="container">
+        <h1> Cell generation</h1>
+
+        <div class="Error">
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="getDict">
+            <p>
+                Enter a dictionary to generate cells <br>
+                Required condition: the number of keys can be equal to 1 or the number of unique values.
+            </p>
+            
+            <form action="/code", method="POST", enctype="multipart/form-data">
+                <textarea name="Dict" 
+                placeholder='{
+    "Belgium": ["Netherlands", "Germany", "Luxembourg"],
+    "Germany": ["Denmark", "Netherlands", "Belgium", "Luxembourg"],
+    "Netherlands": ["Germany", "Belgium"],
+    "Luxembourg": ["Belgium", "Germany"],
+    "Denmark": ["Germany"]
+}'></textarea>
+            <button type="submit", name="Save">Generate</button>
+            </form>
+        </div>
+
+        <div class="Help">
+            <div>Help</div>
+            <p>Dictionary { "A": ["B", "C"], "B": ["A"] } will be incorrect because there is no C element in the keys.</p>
+        </div>
+        <h2>Result</h2>
+        <div class="Images">
+            {% for name, path in array %}
+                <div class="ImageFor">
+                    <p>{{ name }}</p>
+                    <img src= "{{ path }}">
+                </div>        
+            {% endfor %}
+        </div>
+
+
+        <div class="ReturnToMainPage">
+            <form action="/code", method="POST", enctype="multipart/form-data">
+                <button class="ToMainPage" name="MainPage">Go to the main page</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

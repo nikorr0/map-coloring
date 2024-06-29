@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title> Раскрашивание карты </title>
+    <link type="text/css" href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" />
+</head>
+<body>
+    
+    <div class="Container">
+        <h1> Раскрашивание карты методом жадного алгоритма </h1>
+        <div class="Error">
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <div class="firstCont">
+            <div class="Start">
+        
+                
+                <div class="Image">
+                    <p>Образец начального изображения</p> 
+                    <img class="ExampleImage"  src="{{ url_for('static', filename='PreparedMaps/3_color_europe_map_all_nodes_codes.png') }}", alt="Образец карты"> 
+                </div>
+        
+                <div class="Format">
+                    <p class="FormatP">Формат</p>
+                    <p class="FormatDescription">
+                        Карта должна состоять только из 3 цветов, отличных от цветов ячейки:<br />
+                        цвет воды, цвет границ, цвет стран.<br />
+                        <br />
+                        Цвета ячейки:<br />
+                        Круг: #403F4C (64, 63, 76)<br />
+                        Кодировка: #FF0000 (255, 0, 0), #00FF00 (0, 255, 0), #0000FF (0, 0, 255)  
+                    </p>
+                </div>
+            </div>
+
+            <div class="Options">
+
+                <h2>Выбор опций</h2>
+               
+                <form action="/", method="POST", enctype="multipart/form-data">
+                    <div class="GetOptions">
+                        <div class="GetColors">
+                            <p>Введите цвета через пробел (на английском либо в формате hex)</p>
+                            <textarea name="Colors">#F08700 #00A6A6 #5438DC #B24C63 #BBDEF0</textarea> <br />
+    
+                            {% if error and error=="ColorError" %}
+                                <p class="ColorError">
+                                    Введите больше 4 цветов
+                                </p>
+                            {% endif %}
+                        </div>
+    
+                        <div class="GetWorldPart">
+                            <p>Выберите модель карты</p>
+                            <select name="pets" id="pet-select">
+                                <option value="UserMap">Своя карта</option>
+                                <option value="Europe">Карта Европы</option>
+                                <option value="Fantasy">Вымышленная карта</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="LoadFile">
+                        
+                        <input type="file" value="Загрузить Файл" name="photo"/>
+                    </div>
+
+                    <button class="MainButton" name="ColoredButton"> Раскрасить</button>
+                </form>   
+            </div>
+        </div>
+
+        <h2> Результат</h2>
+
+        {% if image %}
+        <div class="Result">
+            
+            <div>
+                <p>Загруженная карта</p>
+                <img src="{{ image }} ">
+            </div>
+            {% if result1 and result2%}
+            <div>
+                <p> Раскрашенная карта </p>
+                <img src=" {{result2 }} "> 
+            </div>
+
+            <div>
+                <p> Карта с графом</p>
+                <img src=" {{ result1 }} "> 
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="UsedColors">
+            <p>Количество использованных цветов: {{ UsedColorsCount }}</p>
+            <p>Использованные цвета: {{ UsedColors }}</p>
+        </div>
+
+        {% else %}
+        <div class="Result850">
+            {% if result1 and result2%}
+            <div>
+                <p> Раскрашенная карта </p>
+                <img src=" {{result2 }} "> 
+            </div>
+
+            <div>
+                <p>Карта с графом</p>
+                <img src=" {{ result1 }} "> 
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <form class="ToNewSite" method="POST", enctype="multipart/form-data", action="/">
+            <p>Перейти на страницу генерации ячеек</p>
+            <button name="NewSite">Перейти</button> 
+        </form>
+
+        </a>
+    </div>
+
+</body>
+</html>
